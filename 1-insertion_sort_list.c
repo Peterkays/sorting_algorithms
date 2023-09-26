@@ -1,36 +1,36 @@
 #include "sort.h"
 
 /**
- * bubble_sort - sorts an array of integers in ascending order using the
- * Bubble sort algorithm
- * @array: The array to be sorted
- * @size: The size of the array
+ * insertion_sort_list - sorts a doubly linked list of integers in ascending
+ * order using the Insertion sort algorithm
+ * @list: Double pointer to the head of the linked list
  *
  * Return: void
  */
-void bubble_sort(int *array, size_t size)
+void insertion_sort_list(listint_t **list)
 {
-	size_t i, n, new_n;
-	int swap;
+	listint_t *swap_node, *next_swap;
 
-	if (array == NULL || size < 2)
+	if (list == NULL || *list == NULL)
 		return;
-
-	n = size;
-	while (n > 0)
+	swap_node = (*list)->next;
+	while (swap_node != NULL)
 	{
-		new_n = 0;
-		for (i = 0; i < n - 1; i++)
+		next_swap = swap_node->next;
+		while (swap_node->prev != NULL && swap_node->prev->n > swap_node->n)
 		{
-			if (array[i] > array[i + 1])
-			{
-				swap = array[i];
-				array[i] = array[i + 1];
-				array[i + 1] = swap;
-				new_n = i + 1;
-				print_array(array, size);
-			}
+			swap_node->prev->next = swap_node->next;
+			if (swap_node->next != NULL)
+				swap_node->next->prev = swap_node->prev;
+			swap_node->next = swap_node->prev;
+			swap_node->prev = swap_node->next->prev;
+			swap_node->next->prev = swap_node;
+			if (swap_node->prev == NULL)
+				*list = swap_node;
+			else
+				swap_node->prev->next = swap_node;
+			print_list(*list);
 		}
-		n = new_n;
+		swap_node = next_swap;
 	}
 }
